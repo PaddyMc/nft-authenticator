@@ -3,10 +3,6 @@ package nft
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
-	"github.com/osmosis-labs/osmosis/osmomath"
-	tokenfactorykeeper "github.com/osmosis-labs/osmosis/v19/x/tokenfactory/keeper"
-
 	"github.com/osmosis-labs/osmosis/v19/x/authenticator/authenticator"
 	"github.com/osmosis-labs/osmosis/v19/x/authenticator/iface"
 )
@@ -23,10 +19,6 @@ const (
 // NFTAuthenticator struct contains all the necessary data to enable the
 // Authenticator to verify signatures and check if a user has a NFT
 type NFTAuthenticator struct {
-	bankKeeper  bankkeeper.Keeper
-	tokenKeeper tokenfactorykeeper.Keeper
-	sva         authenticator.SignatureVerificationAuthenticator
-	denom       string
 }
 
 // Type returns the NFTAuthenticatorType, this is used when an authenticator is added
@@ -37,22 +29,14 @@ func (na NFTAuthenticator) Type() string {
 
 func (na NFTAuthenticator) StaticGas() uint64 {
 	// For every NFTAuthenticator we consume 1000 gas, plus signature verification
-	return 1000
+	return 0
 }
 
 // NewNFTAuthenticator creates a new with the correct keeper needed to function
 // correctly, this is added to the authentication manager when the applciation is
 // started
-func NewNFTAuthenticator(
-	bankKeeper bankkeeper.Keeper,
-	tokenKeeper tokenfactorykeeper.Keeper,
-	sva authenticator.SignatureVerificationAuthenticator,
-) NFTAuthenticator {
-	return NFTAuthenticator{
-		bankKeeper:  bankKeeper,
-		tokenKeeper: tokenKeeper,
-		sva:         sva,
-	}
+func NewNFTAuthenticator() NFTAuthenticator {
+	return NFTAuthenticator{}
 }
 
 // Initialize is used after we get authenticator data from the store,
@@ -60,7 +44,6 @@ func NewNFTAuthenticator(
 func (na NFTAuthenticator) Initialize(
 	data []byte,
 ) (iface.Authenticator, error) {
-	na.denom = string(data)
 	return na, nil
 }
 
@@ -79,7 +62,7 @@ func (na NFTAuthenticator) GetAuthenticationData(
 	messageIndex int,
 	simulate bool,
 ) (iface.AuthenticatorData, error) {
-	return na.sva.GetAuthenticationData(ctx, tx, messageIndex, simulate)
+	return nil, nil //na.sva.GetAuthenticationData(ctx, tx, messageIndex, simulate)
 }
 
 // Authenticate takes an NFTVerificationData struct and validates
@@ -92,30 +75,7 @@ func (na NFTAuthenticator) Authenticate(
 	msg sdk.Msg,
 	authenticationData iface.AuthenticatorData,
 ) iface.AuthenticationResult {
-	sigPubKey := authenticationData.(authenticator.SignatureData).Signatures[0].PubKey
-
-	// Set the public key to the signature public key
-	na.sva.PubKey = sigPubKey
-
-	// Get the signer address
-	signerAddress := sdk.AccAddress(sigPubKey.Address())
-
-	// Authenticate the signature
-	authenticationResult := na.sva.Authenticate(ctx, signerAddress, msg, authenticationData)
-	if !authenticationResult.IsAuthenticated() {
-		return authenticationResult
-	}
-
-	// Get the balances for the account of the signer
-	balance := na.bankKeeper.GetBalance(ctx, signerAddress, na.denom)
-
-	// If account doen't contain the NFT return
-	if !balance.Amount.Equal(osmomath.NewInt(1)) {
-		return iface.NotAuthenticated()
-	}
-
-	// Successful authentication for the NFT holder
-	return authenticationResult
+	return iface.NotAuthenticated()
 }
 
 // Track is used for authenticators to track any information they may need regardless of how the transaction is

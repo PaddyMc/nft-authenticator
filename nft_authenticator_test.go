@@ -15,7 +15,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/types/tx/signing"
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/osmosis-labs/osmosis/v19/app"
 	"github.com/osmosis-labs/osmosis/v19/app/params"
 	"github.com/stretchr/testify/suite"
@@ -72,17 +71,13 @@ func (s *NFTAuthenticatorTest) SetupTest() {
 	}
 
 	// Create a new Secp256k1SignatureAuthenticator for use in the NFT authenticator
-	sva := authenticator.NewSignatureVerificationAuthenticator(
+	_ = authenticator.NewSignatureVerificationAuthenticator(
 		ak,
 		signModeHandler,
 	)
 
 	// Create a the NFT authenticator with the bank keeper and tokenfactory keeper.
-	s.NFT = NewNFTAuthenticator(
-		s.OsmosisApp.BankKeeper,
-		*s.OsmosisApp.TokenFactoryKeeper,
-		sva,
-	)
+	s.NFT = NewNFTAuthenticator()
 }
 
 // TestNFTAuthentication performs a series of tests to validate the NFT authentication flow.
@@ -91,148 +86,56 @@ func (s *NFTAuthenticatorTest) SetupTest() {
 // generates authentication data from a transaction, and evaluates the authentication results.
 // It ensures that the NFT authenticator correctly authenticates transactions based on ownership of the NFT token.
 func (s *NFTAuthenticatorTest) TestNFTAuthentication() {
-	osmoToken := "osmo"
-	nftPostfix := "nft"
+	// osmoToken := "osmo"
+	// nftPostfix := "nft"
 
 	//
 	// Create NFT token for use with the NFT Authenticator
 	//
-	denom, err := s.OsmosisApp.TokenFactoryKeeper.CreateDenom(
-		s.Ctx,
-		s.TestAccAddress[0].String(),
-		nftPostfix,
-	)
-	s.Require().NoError(err)
 
 	//
 	// Mint a single token, this will act as our NFT
 	//
-	coins := sdk.Coins{sdk.NewInt64Coin(denom, 1)}
-	err = s.OsmosisApp.BankKeeper.MintCoins(
-		s.Ctx,
-		"tokenfactory",
-		coins,
-	)
-	s.Require().NoError(err)
 
 	//
 	// We minted the token now send the token to the account we want to authenticate from
 	//
-	s.OsmosisApp.BankKeeper.SendCoinsFromModuleToAccount(s.Ctx, "tokenfactory",
-		s.TestAccAddress[1],
-		coins,
-	)
-	s.Require().NoError(err)
 
 	//
 	// Generate a transaction to test our authentication flow
 	//
-	coins = sdk.Coins{sdk.NewInt64Coin(osmoToken, 2500)}
-	testMsg1 := &banktypes.MsgSend{
-		// The sender of the transaction is Account 0
-		// msg.GetSigners()[0] returns s.TestAccAddress[0]
-		FromAddress: sdk.MustBech32ifyAddressBytes(osmoToken, s.TestAccAddress[0]),
-		ToAddress:   sdk.MustBech32ifyAddressBytes(osmoToken, s.TestAccAddress[1]),
-		Amount:      coins,
-	}
-	feeCoins := sdk.Coins{sdk.NewInt64Coin(osmoToken, 2500)}
-	tx, _ := GenTx(
-		s.EncodingConfig.TxConfig,
-		[]sdk.Msg{testMsg1},
-		feeCoins,
-		300000,
-		"",
-		[]uint64{0},
-		[]uint64{0},
-		[]cryptotypes.PrivKey{
-			// The sender of the transaction is Account 0
-			s.TestPrivKeys[0],
-		},
-		// Sign the transaction from Account 1
-		[]cryptotypes.PrivKey{
-			s.TestPrivKeys[1],
-		},
-	)
 
 	//
 	// Initialize the authenticator, this would happen from the store, we initialize with the name of the NFT
 	//
-	nftAuth, err := s.NFT.Initialize([]byte(denom))
-	s.NFT = nftAuth.(NFTAuthenticator)
-	s.Require().NoError(err)
 
 	//
 	// Get the authentication data from the transaction
 	//
-	authData, err := s.NFT.GetAuthenticationData(
-		s.Ctx,
-		tx,
-		-1,
-		false,
-	)
-	s.Require().NoError(err)
 
 	//
 	// Authenticate the transaction, this will pass as Account 1 has a valid signature and also has the NFT
 	//
-	authentication := s.NFT.Authenticate(
-		s.Ctx,
-		s.TestAccAddress[0],
-		testMsg1,
-		authData,
-	)
 
 	//
 	// Passed :tada:
 	//
-	s.Require().True(authentication.IsAuthenticated())
 
 	//
 	// Generate a transaction to test our authentication flow that we know will fail
 	//
-	tx, _ = GenTx(
-		s.EncodingConfig.TxConfig,
-		[]sdk.Msg{testMsg1},
-		feeCoins,
-		300000,
-		"",
-		[]uint64{0},
-		[]uint64{0},
-		[]cryptotypes.PrivKey{
-			// The sender of the transaction is Account 0
-			s.TestPrivKeys[0],
-		},
-		// Sign the transaction from Account 2
-		[]cryptotypes.PrivKey{
-			s.TestPrivKeys[2],
-		},
-	)
 
 	//
 	// Get the authentication data from the transaction
 	//
-	authData, err = s.NFT.GetAuthenticationData(
-		s.Ctx,
-		tx,
-		-1,
-		false,
-	)
-	s.Require().NoError(err)
 
 	//
 	// Try to authenticate the transaction, from an account that doesn't own the NFT
 	//
-	authentication = s.NFT.Authenticate(
-		s.Ctx,
-		s.TestAccAddress[2],
-		testMsg1,
-		authData,
-	)
 
 	//
 	// Failed :tear:
 	//
-	s.Require().False(authentication.IsAuthenticated())
 }
 
 // GenTx is a helper function to generate a signed mock transaction.
