@@ -19,6 +19,8 @@ const (
 // NFTAuthenticator struct contains all the necessary data to enable the
 // Authenticator to verify signatures and check if a user has a NFT
 type NFTAuthenticator struct {
+	// bank keeper
+	// signature verification authenticator
 }
 
 // Type returns the NFTAuthenticatorType, this is used when an authenticator is added
@@ -35,7 +37,10 @@ func (na NFTAuthenticator) StaticGas() uint64 {
 // NewNFTAuthenticator creates a new with the correct keeper needed to function
 // correctly, this is added to the authentication manager when the applciation is
 // started
-func NewNFTAuthenticator() NFTAuthenticator {
+func NewNFTAuthenticator(
+// bank authenticator
+// signature verification authenticator
+) NFTAuthenticator {
 	return NFTAuthenticator{}
 }
 
@@ -62,6 +67,7 @@ func (na NFTAuthenticator) GetAuthenticationData(
 	messageIndex int,
 	simulate bool,
 ) (iface.AuthenticatorData, error) {
+	// here we need the same data for the signature authentication data
 	return nil, nil //na.sva.GetAuthenticationData(ctx, tx, messageIndex, simulate)
 }
 
@@ -75,6 +81,17 @@ func (na NFTAuthenticator) Authenticate(
 	msg sdk.Msg,
 	authenticationData iface.AuthenticatorData,
 ) iface.AuthenticationResult {
+
+	// get the public key
+
+	// get the account
+
+	// authenticate the user
+
+	// get the balances of the NFT token
+
+	// return authenticated if all conditions pass
+
 	return iface.NotAuthenticated()
 }
 
