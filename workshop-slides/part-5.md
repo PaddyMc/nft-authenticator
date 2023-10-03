@@ -9,7 +9,7 @@ The NFT Authenticator is a type of Authenticator designed to streamline transact
 Here's a simplified example of how the NFT Authenticator works in conjunction with the Osmosis Token Factory:
 
 ```go
-1. *Alice* mints an NFT using the Osmsois Token Factory.
+1. *Alice* mints an NFT using the Osmosis Token Factory.
 
 2. *Alice* now possesses the NFT.
 
