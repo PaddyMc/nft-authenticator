@@ -20,7 +20,7 @@ Osmosis Authenticators are integral components of the blockchain system that ser
 
 Authenticators are designed to abstract away many of the complexities associated with account management and transaction validation, providing a smoother and more user-friendly experience. They serve as gatekeepers, ensuring that users have the appropriate permissions and credentials to perform specific actions on the blockchain.
 
-To delve deeper into the specifics of Osmosis Authenticators, you can explore the [Osmosis Authenticator Module](https://github.com/osmosis-labs/osmosis/blob/account-abstraction-main/x/authenticator) and the [Osmosis Authenticator Interface](https://github.com/osmosis-labs/osmosis/blob/account-abstraction-main/x/authenticator/iface/iface.go). These resources provide a comprehensive understanding of how authenticators are implemented and utilized within the Osmosis blockchain ecosystem,
+To delve deeper into the specifics of Osmosis Authenticators, you can explore the [Osmosis Authenticator Module](https://github.com/osmosis-labs/osmosis/blob/account-abstraction-main/x/authenticator) and the [Osmosis Authenticator Interface](https://github.com/osmosis-labs/osmosis/blob/account-abstraction-main/x/authenticator/iface/iface.go). These resources provide a comprehensive understanding of how authenticators are implemented and utilized within the Osmosis blockchain ecosystem.
 
 ## (The Authenticator Interface)[https://github.com/osmosis-labs/osmosis/blob/account-abstraction-main/x/authenticator/iface/iface.go]
 
