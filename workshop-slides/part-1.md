@@ -7,7 +7,7 @@ In this workshop, we delve into two key concepts in blockchain technology: "Acco
 In this workshop, we will explore the Authenticator module and package, followed by a practical exercise of creating a concrete authenticator in Golang.
 
 ```go
-1. *Presentation:** This session provides an overview of Account Abstraction and sets the stage for the workshops topics.
+1. *Presentation:* This session provides an overview of Account Abstraction and sets the stage for the workshops topics.
 
 2. *Exploring the Authenticator Package:* We will conduct an in-depth review of the Authenticator package within the Osmosis Node codebase.
 
@@ -20,5 +20,5 @@ In this workshop, we will explore the Authenticator module and package, followed
 6. *Initiating the NFT Authenticator Workshop:* Start the NFT Authenticator workshop, applying your knowledge to a practical implementation.
 ```
 
-This informative session will give insights into enhancing the security and usability of the Osmosis blockchain with a reference implementation of and authenticator.
+This session will give insights into enhancing the security and usability of the Osmosis blockchain with a reference implementation of an authenticator.
 
