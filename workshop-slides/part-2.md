@@ -1,10 +1,10 @@
-## Authenticators
+## Account Abstraction
 
-**What are Osmosis Authenticators?**
+**What Is Account Abstraction?**
 
-Osmosis Authenticators are integral components of the blockchain system that serve as code snippets responsible for governing access to user accounts. These authenticators play a crucial role in enhancing the usability of blockchain technology by simplifying and securing the interaction between users and the blockchain.
+Account Abstraction is a concept aimed at simplifying blockchain interactions by moving beyond the traditional single-key, single-account approach. It seeks to remove complexities typically associated with blockchain transactions, offering users a more straightforward and flexible way to engage with these systems.
 
-Authenticators are designed to abstract away many of the complexities associated with account management and transaction validation, providing a smoother and more user-friendly experience. They serve as gatekeepers, ensuring that users have the appropriate permissions and credentials to perform specific actions on the blockchain.
+**How Does Account Abstraction Improve Usability?**
 
-To delve deeper into the specifics of Osmosis Authenticators, you can explore the [Osmosis Authenticator Module](https://github.com/osmosis-labs/osmosis/blob/account-abstraction-main/x/authenticator) and the [Osmosis Authenticator Interface](https://github.com/osmosis-labs/osmosis/blob/account-abstraction-main/x/authenticator/iface/iface.go). These resources provide a comprehensive understanding of how authenticators are implemented and utilized within the Osmosis blockchain ecosystem.
+Account Abstraction significantly enhances usability by eliminating technical barriers that users often encounter when dealing with blockchain systems. Users can now perform actions and transactions without needing an in-depth understanding of the underlying blockchain mechanics. This concept paves the way for a more user-friendly experience, potentially increasing adoption and expanding access to previously unavailable services.
 

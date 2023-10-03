@@ -1,30 +1,60 @@
-## NFT Authenticator
+## (The Authenticator Interface)[https://github.com/osmosis-labs/osmosis/blob/account-abstraction-main/x/authenticator/iface/iface.go]
 
-**What is the NFT Authenticator?**
+```golang
+// Authenticator is an interface employed to encapsulate all authentication functionalities essential for
+// verifying transactions, paying transaction fees, and managing gas consumption during verification.
+type Authenticator interface {
+	// Type defines the various types of authenticators, such as SignatureVerificationAuthenticator
+	// or CosmWasmAuthenticator. Each authenticator type must be registered within the AuthenticatorManager,
+	Type() string
 
-The NFT Authenticator is a type of Authenticator designed to streamline transactions by leveraging Non-Fungible Tokens (NFTs). By using the NFT Authenticator, an NFT owner can send an NFT to an address, allowing that address to transact on behalf of the original owner address. 
+	// StaticGas specifies the gas consumption enforced on each call to the authenticator.
+	StaticGas() uint64
 
-**Workflow with the Osmosis Token Factory**
+	// Initialize is used when an authenticator associated with an account is retrieved
+	// from storage. The data stored for each (account, authenticator) pair is provided
+	// to this method. For instance, the SignatureVerificationAuthenticator requires a PublicKey
+	// for signature verification, we can Initialize() the code with that data,
+	Initialize(data []byte) (Authenticator, error)
 
-Here's a simplified example of how the NFT Authenticator works in conjunction with the Osmosis Token Factory:
+	// GetAuthenticationData retrieves any required authentication data from a transaction.
+	// It returns an interface defined as a concrete type by the implementer of the interface.
+	GetAuthenticationData(
+		ctx sdk.Context, 
+		tx sdk.Tx, 
+		messageIndex int, 
+		simulate bool, 
+	) (AuthenticatorData, error)
 
-```go
-1. *Alice* mints an NFT using the Osmsois Token Factory.
+	// Track is used for authenticators to track any information they may need regardless of how the transactions is
+	// authenticated. For instance, if a message is authenticated via authz, ICA, or similar, those entrypoints should
+	// call authenticator.Track(...) so that the authenticator can know that the account has executed a specific message
+	Track(
+		ctx sdk.Context, 
+		account sdk.AccAddress, 
+		msg sdk.Msg, 
+	) error
 
-2. *Alice* now possesses the NFT.
+	// Authenticate validates a message based on the signer and data parsed from the GetAuthenticationData function.
+	// It returns true if authenticated, or false if not authenticated. This function is used within an ante handler.
+	// Note: Gas consumption occurs within this function.
+	Authenticate(
+		ctx sdk.Context, 
+		account sdk.AccAddress, 
+		msg sdk.Msg, 
+		authenticationData AuthenticatorData, // The authentication data is used to authenticate a message.
+	) AuthenticationResult
 
-3. *Alice* decides to send the NFT to *Bob*.
+	// ConfirmExecution is employed in the post-handler function to enforce transaction rules,
+	// such as spending and transaction limits. 
+	ConfirmExecution(ctx sdk.Context, account sdk.AccAddress, msg sdk.Msg, authenticationData AuthenticatorData) ConfirmationResult
 
-4. *Bob* wants to perform a transaction on behalf of *Alice*, so they sign a transaction with *Alice* as the sender (since *Alice* is the minter).
+	// OnAuthenticatorAdded is called when an authenticator is added to an account. If the data is not properly formatted
+	// or the authenticator is not compatible with the account, an error should be returned.
+	OnAuthenticatorAdded(ctx sdk.Context, account sdk.AccAddress, data []byte) error
 
-5. The NFT Authenticator checks that *Bob* has signed the transaction and the NFT in their account.
-
-6. The transaction is successful because *Bob* has the NFT and the signature is correct.
-
-7. *Chris* feel left out and tries to send transactions on behalf of *Alice* but fails.
-
-8. The spend limit authenticator and NFT authenticators together can be used with an AllOf authenticator to ensure secure and controlled transactions.
+	// OnAuthenticatorRemoved is called when an authenticator is removed from an account.
+	// This can be used to update any global data that the authenticator is tracking or to prevent removal.
+	OnAuthenticatorRemoved(ctx sdk.Context, account sdk.AccAddress, data []byte) error
+}
 ```
-
-This workshop serves as an introduction to the concepts of Account Abstraction and the NFT Authenticator. Feel free to explore the [Osmosis Authenticator Module](https://github.com/osmosis-labs/osmosis/blob/account-abstraction-main/x/authenticator) repository for more in-depth examples, and practical applications of these concepts.
-  

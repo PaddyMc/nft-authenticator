@@ -2,6 +2,24 @@
 
 In this workshop, we delve into two key concepts in blockchain technology: "Account Abstraction" and the "NFT Authenticator." These concepts are designed to simplify and enhance the usability of blockchain systems, making them more accessible and user-friendly.
 
+## Workshop Agenda
+
+In this workshop, we will explore the Authenticator module and package, followed by a practical exercise of creating a concrete authenticator in Golang.
+
+1. **Presentation:** This session provides an overview of Account Abstraction and sets the stage for the workshop's topics.
+
+2. **Exploring the Authenticator Package:** We will conduct an in-depth review of the Authenticator package within the Osmosis Node codebase.
+
+3. **Understanding Authenticator Architecture:** Dive into the architectural aspects of the authenticator module, gaining insights into its design and functionality.
+
+4. **Comprehensive Authentication Techniques:** Explore various authentication methods, including signature-based, passkey-based, and spend limit-based authenticators.
+
+5. **Combining Authenticators:** Learn how to compose multiple authenticators to create complex and secure authentication processes.
+
+6. **Initiating the NFT Authenticator Workshop:** Start the NFT Authenticator workshop, applying your knowledge to a practical implementation.
+
+This informative session will give insights into enhancing the security and usability of the Osmosis blockchain with a reference implementation of and authenticator.
+
 ## Account Abstraction
 
 **What Is Account Abstraction?**
@@ -21,6 +39,7 @@ Osmosis Authenticators are integral components of the blockchain system that ser
 Authenticators are designed to abstract away many of the complexities associated with account management and transaction validation, providing a smoother and more user-friendly experience. They serve as gatekeepers, ensuring that users have the appropriate permissions and credentials to perform specific actions on the blockchain.
 
 To delve deeper into the specifics of Osmosis Authenticators, you can explore the [Osmosis Authenticator Module](https://github.com/osmosis-labs/osmosis/blob/account-abstraction-main/x/authenticator) and the [Osmosis Authenticator Interface](https://github.com/osmosis-labs/osmosis/blob/account-abstraction-main/x/authenticator/iface/iface.go). These resources provide a comprehensive understanding of how authenticators are implemented and utilized within the Osmosis blockchain ecosystem.
+
 
 ## (The Authenticator Interface)[https://github.com/osmosis-labs/osmosis/blob/account-abstraction-main/x/authenticator/iface/iface.go]
 
