@@ -101,7 +101,6 @@ func (s *AuthenticatorSuite) TestRoundTripAliceBobAndChris() {
 	//
 	nftAuth := NewNFTAuthenticator(
 		s.app.BankKeeper,
-		*s.app.TokenFactoryKeeper,
 		sva,
 	)
 

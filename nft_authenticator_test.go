@@ -80,7 +80,6 @@ func (s *NFTAuthenticatorTest) SetupTest() {
 	// Create a the NFT authenticator with the bank keeper and tokenfactory keeper.
 	s.NFT = NewNFTAuthenticator(
 		s.OsmosisApp.BankKeeper,
-		*s.OsmosisApp.TokenFactoryKeeper,
 		sva,
 	)
 }

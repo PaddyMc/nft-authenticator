@@ -45,13 +45,11 @@ func (na NFTAuthenticator) StaticGas() uint64 {
 // started
 func NewNFTAuthenticator(
 	bankKeeper bankkeeper.Keeper,
-	tokenKeeper tokenfactorykeeper.Keeper,
 	sva authenticator.SignatureVerificationAuthenticator,
 ) NFTAuthenticator {
 	return NFTAuthenticator{
-		bankKeeper:  bankKeeper,
-		tokenKeeper: tokenKeeper,
-		sva:         sva,
+		bankKeeper: bankKeeper,
+		sva:        sva,
 	}
 }
 
