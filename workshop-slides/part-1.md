@@ -9,7 +9,7 @@ In this workshop, we will explore the Authenticator module and package, followed
 ```go
 1. *Presentation:* This session provides an overview of Account Abstraction and sets the stage for the workshops topics.
 
-2. *Exploring the Authenticator Package:* We will conduct an in-depth review of the Authenticator package within the Osmosis Node codebase.
+2. *Exploring the Authenticator Module:* We will conduct an in-depth review of the Authenticator module within the Osmosis Node codebase.
 
 3. *Understanding Authenticator Architecture:* Dive into the architectural aspects of the authenticator module, gaining insights into its design and functionality.
 
